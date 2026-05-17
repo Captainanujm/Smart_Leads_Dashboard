@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import path from "path";
 import connectDB from "./config/db";
 import env from "./config/env";
 import authRoutes from "./routes/authRoutes";
@@ -23,8 +24,6 @@ app.get("/api/health", (_req, res) => {
   res.json({ success: true, message: "API is running", uptime: process.uptime() });
 });
 
-import path from "path";
-
 app.use(errorHandler);
 
 if (env.nodeEnv === "production") {
@@ -36,10 +35,13 @@ if (env.nodeEnv === "production") {
 }
 
 const start = async () => {
-  await connectDB();
+  // Bind the port FIRST so Render doesn't kill the app while waiting for MongoDB
   app.listen(env.port, () => {
     console.log(`Server running on port ${env.port}`);
   });
+  
+  // Then connect to MongoDB
+  await connectDB();
 };
 
 start();
