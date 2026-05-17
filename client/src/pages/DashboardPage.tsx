@@ -18,8 +18,8 @@ export default function DashboardPage() {
       setLoading(true);
       const res = await getLeads({ page: 1, limit: 10 });
       setLeads(res.data?.data || []);
-    } catch (error) {
-      console.error("Failed to fetch leads", error);
+    } catch {
+      // API error handled by interceptor
     } finally {
       setLoading(false);
     }
@@ -68,10 +68,7 @@ export default function DashboardPage() {
           onClick={openNewLeadModal}
           className="px-4 py-2 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors flex items-center gap-2"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
-          New Lead
+          <span>+</span> New Lead
         </button>
       </div>
 
