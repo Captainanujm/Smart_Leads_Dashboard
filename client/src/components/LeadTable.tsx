@@ -14,7 +14,7 @@ export default function LeadTable({ leads, onEdit, onDelete }: LeadTableProps) {
   if (leads.length === 0) {
     return (
       <div className="p-8 text-center text-slate-400">
-        No leads found. Create one to get started.
+        No leads found yet.
       </div>
     );
   }
