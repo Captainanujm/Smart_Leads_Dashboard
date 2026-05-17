@@ -7,15 +7,12 @@ const leadSchema = new Schema<ILead>(
       type: String,
       required: [true, "Lead name is required"],
       trim: true,
-      minlength: 2,
-      maxlength: 100,
     },
     email: {
       type: String,
       required: [true, "Lead email is required"],
-      lowercase: true,
       trim: true,
-      match: [/^\S+@\S+\.\S+$/, "Please enter a valid email"],
+      lowercase: true,
     },
     status: {
       type: String,

@@ -20,7 +20,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/leads", leadRoutes);
 
 app.get("/api/health", (_req, res) => {
-  res.json({ success: true, message: "Server is running" });
+  res.json({ success: true, message: "API is running", uptime: process.uptime() });
 });
 
 app.use(errorHandler);
