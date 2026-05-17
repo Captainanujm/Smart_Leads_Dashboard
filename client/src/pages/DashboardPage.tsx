@@ -1,14 +1,30 @@
 import { useState, useEffect, useCallback } from "react";
-import { Lead, LeadFormData } from "../types";
-import { getLeads, createLead, updateLead, deleteLead } from "../api/leads";
+import { Lead, LeadFormData, LeadFilters } from "../types";
+import { getLeads, createLead, updateLead, deleteLead, exportLeadsCsv } from "../api/leads";
 import LeadTable from "../components/LeadTable";
 import LeadForm from "../components/LeadForm";
+import FilterBar from "../components/FilterBar";
+import Pagination from "../components/Pagination";
 import Spinner from "../components/Spinner";
+import { useDebounce } from "../hooks/useDebounce";
 
 export default function DashboardPage() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   
+  const [filters, setFilters] = useState<LeadFilters>({
+    status: "",
+    source: "",
+    search: "",
+    sortBy: "latest",
+    page: 1,
+  });
+  
+  const [totalPages, setTotalPages] = useState(1);
+  const [exporting, setExporting] = useState(false);
+
+  const debouncedSearch = useDebounce(filters.search, 300);
+
   // Modal state
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingLead, setEditingLead] = useState<Lead | null>(null);
@@ -16,18 +32,56 @@ export default function DashboardPage() {
   const fetchLeads = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await getLeads({ page: 1, limit: 10 });
+      const params: Record<string, string | number> = {
+        page: filters.page,
+        limit: 10,
+        sortBy: filters.sortBy,
+      };
+      
+      if (filters.status) params.status = filters.status;
+      if (filters.source) params.source = filters.source;
+      if (debouncedSearch) params.search = debouncedSearch;
+
+      const res = await getLeads(params);
       setLeads(res.data?.data || []);
+      setTotalPages(res.data?.totalPages || 1);
     } catch {
       // API error handled by interceptor
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [filters.page, filters.status, filters.source, filters.sortBy, debouncedSearch]);
 
   useEffect(() => {
     fetchLeads();
   }, [fetchLeads]);
+
+  const handleFilterChange = (newFilters: Partial<LeadFilters>) => {
+    setFilters((prev) => ({ ...prev, ...newFilters }));
+  };
+
+  const handleExport = async () => {
+    try {
+      setExporting(true);
+      const params: Record<string, string> = { sortBy: filters.sortBy };
+      if (filters.status) params.status = filters.status;
+      if (filters.source) params.source = filters.source;
+      if (debouncedSearch) params.search = debouncedSearch;
+
+      const blob = await exportLeadsCsv(params);
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "leads_export.csv");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Export failed", error);
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const handleCreateOrUpdate = async (data: LeadFormData) => {
     if (editingLead) {
@@ -72,7 +126,14 @@ export default function DashboardPage() {
         </button>
       </div>
 
-      <div className="bg-surface rounded-xl border border-slate-700/50 shadow-sm overflow-hidden">
+      <FilterBar 
+        filters={filters} 
+        onChange={handleFilterChange} 
+        onExport={handleExport}
+        exporting={exporting}
+      />
+
+      <div className="bg-surface rounded-xl border border-slate-700/50 shadow-sm overflow-hidden mb-6">
         {loading ? (
           <Spinner />
         ) : (
@@ -83,6 +144,14 @@ export default function DashboardPage() {
           />
         )}
       </div>
+
+      {!loading && leads.length > 0 && (
+        <Pagination 
+          page={filters.page} 
+          totalPages={totalPages} 
+          onPageChange={(p) => handleFilterChange({ page: p })} 
+        />
+      )}
 
       {isFormOpen && (
         <LeadForm
