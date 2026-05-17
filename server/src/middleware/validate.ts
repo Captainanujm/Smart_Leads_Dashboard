@@ -20,7 +20,7 @@ const validate = (rules: ValidationRule[]) => {
         continue;
       }
 
-      if (value !== undefined && value !== null) {
+      if (value) {
         if (rule.type && typeof value !== rule.type) {
           errors.push(`${rule.field} must be a ${rule.type}`);
         }
@@ -29,7 +29,7 @@ const validate = (rules: ValidationRule[]) => {
           errors.push(`${rule.field} must be one of: ${rule.enum.join(", ")}`);
         }
 
-        if (rule.minLength && typeof value === "string" && value.length < rule.minLength) {
+        if (rule.minLength && value.length < rule.minLength) {
           errors.push(`${rule.field} must be at least ${rule.minLength} characters`);
         }
       }

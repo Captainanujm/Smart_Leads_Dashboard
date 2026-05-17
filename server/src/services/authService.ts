@@ -77,7 +77,7 @@ class AuthService {
     };
   }
 
-  async getProfile(userId: string): Promise<Partial<IUser>> {
+  async getProfile(userId: string) {
     const user = await User.findById(userId);
 
     if (!user) {
@@ -93,7 +93,6 @@ class AuthService {
       name: user.name,
       email: user.email,
       role: user.role,
-      createdAt: user.createdAt,
     };
   }
 }

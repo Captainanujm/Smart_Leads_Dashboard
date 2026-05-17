@@ -99,7 +99,7 @@ class LeadController {
 
   async exportCsv(req: Request, res: Response, next: NextFunction) {
     try {
-      const query: LeadQuery = {
+      const query = {
         status: req.query.status as string,
         source: req.query.source as string,
         search: req.query.search as string,
