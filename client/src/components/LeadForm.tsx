@@ -106,10 +106,10 @@ export default function LeadForm({ initialData, onSubmit, onCancel }: LeadFormPr
                   onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
                   className="w-full px-3 py-2 bg-surface-dark border border-slate-600 rounded-lg text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
                 >
-                  <option value="New">New</option>
-                  <option value="Contacted">Contacted</option>
-                  <option value="Qualified">Qualified</option>
-                  <option value="Lost">Lost</option>
+                  <option value="New" className="bg-surface-dark text-white">New</option>
+                  <option value="Contacted" className="bg-surface-dark text-white">Contacted</option>
+                  <option value="Qualified" className="bg-surface-dark text-white">Qualified</option>
+                  <option value="Lost" className="bg-surface-dark text-white">Lost</option>
                 </select>
               </div>
 
@@ -122,9 +122,9 @@ export default function LeadForm({ initialData, onSubmit, onCancel }: LeadFormPr
                   onChange={(e) => setFormData({ ...formData, source: e.target.value as any })}
                   className="w-full px-3 py-2 bg-surface-dark border border-slate-600 rounded-lg text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
                 >
-                  <option value="Website">Website</option>
-                  <option value="Instagram">Instagram</option>
-                  <option value="Referral">Referral</option>
+                  <option value="Website" className="bg-surface-dark text-white">Website</option>
+                  <option value="Instagram" className="bg-surface-dark text-white">Instagram</option>
+                  <option value="Referral" className="bg-surface-dark text-white">Referral</option>
                 </select>
               </div>
             </div>
