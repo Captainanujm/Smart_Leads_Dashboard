@@ -14,7 +14,9 @@ const statusColors: Record<Lead["status"], string> = {
 export default function StatusBadge({ status }: StatusBadgeProps) {
   return (
     <span
-      className={`inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full border ${statusColors[status]}`}
+      className={`inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full border ${
+        statusColors[status] || "bg-slate-500/10 text-slate-400 border-slate-500/20"
+      }`}
     >
       {status}
     </span>
