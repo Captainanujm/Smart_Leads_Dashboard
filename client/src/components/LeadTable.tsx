@@ -1,4 +1,4 @@
-import { Lead } from "../types";
+import type { Lead } from "../types";
 import StatusBadge from "./StatusBadge";
 import { useAuth } from "../context/AuthContext";
 

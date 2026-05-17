@@ -1,5 +1,5 @@
-import { useState, FormEvent, useEffect } from "react";
-import { Lead, LeadFormData } from "../types";
+import { useState, type FormEvent, useEffect } from "react";
+import type { Lead, LeadFormData } from "../types";
 
 interface LeadFormProps {
   initialData?: Lead | null;

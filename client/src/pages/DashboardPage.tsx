@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Lead, LeadFormData, LeadFilters } from "../types";
+import type { Lead, LeadFormData, LeadFilters } from "../types";
 import { getLeads, createLead, updateLead, deleteLead, exportLeadsCsv } from "../api/leads";
 import LeadTable from "../components/LeadTable";
 import LeadForm from "../components/LeadForm";

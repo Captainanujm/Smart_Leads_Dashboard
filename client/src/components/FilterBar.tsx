@@ -1,4 +1,4 @@
-import { LeadFilters } from "../types";
+import type { LeadFilters } from "../types";
 
 interface FilterBarProps {
   filters: LeadFilters;

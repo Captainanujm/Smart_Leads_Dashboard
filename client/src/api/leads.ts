@@ -1,5 +1,5 @@
 import api from "./axios";
-import { ApiResponse, PaginatedLeads, Lead, LeadFormData } from "../types";
+import type { ApiResponse, PaginatedLeads, Lead, LeadFormData } from "../types";
 
 export const getLeads = async (params: Record<string, string | number>) => {
   const res = await api.get<ApiResponse<PaginatedLeads>>("/leads", { params });

@@ -1,5 +1,5 @@
 import api from "./axios";
-import { ApiResponse, User } from "../types";
+import type { ApiResponse, User } from "../types";
 
 export const loginUser = async (email: string, password: string) => {
   const res = await api.post<ApiResponse<User>>("/auth/login", {

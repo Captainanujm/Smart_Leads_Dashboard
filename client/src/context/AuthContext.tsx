@@ -3,9 +3,9 @@ import {
   useContext,
   useState,
   useEffect,
-  ReactNode,
+  type ReactNode,
 } from "react";
-import { User } from "../types";
+import type { User } from "../types";
 import { getMe, loginUser, registerUser, logoutUser } from "../api/auth";
 
 interface AuthContextType {
