@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:6
+    container_name: smart_leads_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - leads_network
+
+  server:
+    build:
+      context: ./server
+      dockerfile: ../Dockerfile.server
+    container_name: smart_leads_server
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb://mongo:27017/smart_leads
+      - JWT_SECRET=supersecretjwtkeyforlocaldev
+      - NODE_ENV=development
+    depends_on:
+      - mongo
+    networks:
+      - leads_network
+
+  client:
+    build:
+      context: ./client
+      dockerfile: ../Dockerfile.client
+    container_name: smart_leads_client
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    networks:
+      - leads_network
+
+volumes:
+  mongo_data:
+
+networks:
+  leads_network:
+    driver: bridge
