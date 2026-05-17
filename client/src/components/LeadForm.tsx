@@ -134,7 +134,7 @@ export default function LeadForm({ initialData, onSubmit, onCancel }: LeadFormPr
             <button
               type="button"
               onClick={onCancel}
-              className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white bg-surface-light hover:bg-slate-700 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-surface-light rounded-lg transition-colors"
             >
               Cancel
             </button>
