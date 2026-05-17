@@ -1,68 +1,52 @@
 # Smart Leads Dashboard
 
-A full-stack Lead Management Dashboard built using the MERN stack with modern features, a professional UI, and clean architecture.
+Hey! This is my submission for the Lead Management Dashboard assignment. Built it using the MERN stack with TypeScript (no `any` types used, as requested).
 
 ## Features
+- **Auth**: JWT stored in HttpOnly cookies, bcrypt for passwords.
+- **Leads**: Full CRUD (Create, Read, Update, Delete).
+- **Filters**: You can filter by Status or Source, and I added a debounced search so it doesn't spam the API.
+- **Pagination**: Backend handles it, 10 items per page.
+- **Export**: Button to export whatever is currently filtered into a CSV.
+- **RBAC**: Sales role can only manage their own leads, Admin can see and delete everything.
+- **Theme**: Added a quick dark mode toggle because bright screens hurt my eyes.
 
-- **Authentication System**: JWT-based auth with HttpOnly cookies, bcrypt hashing, and role-based access control.
-- **Leads Management**: Full CRUD operations for managing leads.
-- **Advanced Filtering & Search**: Debounced search, multi-factor filtering (Status, Source), and sorting.
-- **Pagination**: Backend-driven pagination for scalability.
-- **CSV Export**: Export filtered data directly to a CSV file.
-- **Role-Based Access Control**: Admins have full access; Sales users can only manage their assigned leads.
-- **Dark Mode**: Built-in dark/light mode toggle with persistence.
-- **Dockerized**: Easy setup and deployment via Docker Compose.
+## Tech
+- React + Vite + TS + Tailwind
+- Node + Express + TS + MongoDB
 
-## Tech Stack
+## How to run it
 
-- **Frontend**: React (Vite), TypeScript, TailwindCSS v4, React Router, Axios
-- **Backend**: Node.js, Express, TypeScript, Mongoose
-- **Database**: MongoDB
-
-## Quick Start (Docker)
-
-The easiest way to run the project is using Docker.
-
-1. Ensure Docker and Docker Compose are installed on your machine.
-2. Clone the repository.
-3. Run the following command from the root directory:
-
-```bash
+### The Easy Way (Docker)
+I added a docker-compose file so you don't have to set up everything manually. Just make sure docker is running and do:
+```
 docker-compose up --build
 ```
+Frontend runs on `http://localhost` and API on `http://localhost/api`.
 
-The application will be available at:
-- **Frontend**: http://localhost
-- **Backend API**: http://localhost/api
+### The Manual Way
+If docker is acting up:
+1. Put your mongo uri and jwt secret in `server/.env`
+2. Run backend: `cd server && npm i && npm run dev`
+3. Run frontend: `cd client && npm i && npm run dev`
 
-## Manual Setup
+*Note: Default users are created as 'sales'. If you want to test Admin features, you'll need to manually change the role to 'admin' in your MongoDB compass/atlas for one user.*
 
-If you prefer to run it without Docker:
-
-### 1. Database Setup
-Create a MongoDB database (e.g., MongoDB Atlas) and obtain the connection string.
-
-### 2. Backend Setup
-```bash
-cd server
-npm install
-cp .env.example .env # Edit the .env file with your MONGO_URI and JWT_SECRET
-npm run build
-npm start
-```
-*For development, use `npm run dev`.*
-
-### 3. Frontend Setup
-```bash
-cd client
-npm install
-npm run dev
-```
-
-## Default Accounts
-
-To test Role-Based Access Control, register two different accounts or manipulate the database manually. By default, newly registered users are assigned the `sales` role. To test the `admin` role, you will need to manually change the role of a user in the MongoDB database to `admin`.
+---
 
 ## API Documentation
 
-See [API_DOCS.md](./API_DOCS.md) for detailed information on the available endpoints.
+Base url is `/api`. All lead routes need you to be logged in (requires cookie).
+
+**Auth**
+- `POST /auth/register` - pass {name, email, password}
+- `POST /auth/login` - pass {email, password}
+- `GET /auth/me` - gets current logged in user
+- `POST /auth/logout` - clears cookie
+
+**Leads**
+- `GET /leads` - query params: `page`, `status`, `source`, `search`, `sortBy` (latest/oldest)
+- `POST /leads` - body: {name, email, status, source}
+- `PUT /leads/:id` - update a lead
+- `DELETE /leads/:id` - admin only
+- `GET /leads/export/csv` - downloads the csv
