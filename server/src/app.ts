@@ -9,6 +9,7 @@ import leadRoutes from "./routes/leadRoutes";
 import errorHandler from "./middleware/errorHandler";
 
 const app = express();
+app.set("trust proxy", 1);
 
 app.use(cors({
   origin: true,
